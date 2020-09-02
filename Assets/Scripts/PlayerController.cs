@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody _rb;
     private float _movX, _movY;
+    private int _score;
     [SerializeField]
     private float _speed;
 
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _score = 0;
     }
 
     void OnMove(InputValue movementValue)
@@ -27,5 +29,12 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = new Vector3(_movX, 0.0f, _movY);
         _rb.AddForce(movement*_speed);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Pick Up"))
+            other.gameObject.SetActive(false);
+        _score++;
     }
 }
