@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public TextMeshProUGUI scoreText;
+    public GameObject winText;
+    [SerializeField]
+    private float _speed;
+
     private Rigidbody _rb;
     private float _movX, _movY;
     private int _score;
-    [SerializeField]
-    private float _speed;
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _score = 0;
+
+        SetScoreText();
+        winText.gameObject.SetActive(false);
     }
 
     void OnMove(InputValue movementValue)
@@ -23,6 +30,13 @@ public class PlayerController : MonoBehaviour
         Vector2 movementVector = movementValue.Get<Vector2>();
         _movX = movementVector.x;
         _movY = movementVector.y;
+    }
+
+    void SetScoreText()
+    {
+        scoreText.text = "Score: " + _score.ToString();
+        if (_score >= 15)
+            winText.gameObject.SetActive(true);
     }
 
     private void FixedUpdate()
@@ -36,5 +50,6 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.CompareTag("Pick Up"))
             other.gameObject.SetActive(false);
         _score++;
+        SetScoreText();
     }
 }
